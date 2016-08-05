@@ -1,7 +1,10 @@
 package com.codepath.apps.twitterclient.models;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 // Parse the JSON + store the data, encapsulate static logic or display logic
 public class Tweet {
@@ -22,6 +25,23 @@ public class Tweet {
         }
 
         return tweet;
+    }
+
+    public static ArrayList<Tweet> fromJsonArray(JSONArray jsonArray) {
+        ArrayList<Tweet> tweets = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            try {
+                JSONObject tweetJson = jsonArray.getJSONObject(i);
+                Tweet tweet = Tweet.fromJson(tweetJson);
+                if (tweet != null) {
+                    tweets.add(tweet);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                continue;
+            }
+        }
+        return tweets;
     }
 
     public String getCreatedAt() {
