@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.codepath.apps.twitterclient.R;
 import com.codepath.apps.twitterclient.models.Tweet;
 import com.codepath.apps.twitterclient.models.User;
+import com.codepath.apps.twitterclient.utils.ParseRelativeDate;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -30,12 +31,14 @@ public class TweetsArrayAdapter extends ArrayAdapter<Tweet> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_tweet, parent, false);
         }
 
-        ImageView ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
         TextView tvUserName = (TextView) convertView.findViewById(R.id.tvUserName);
         TextView tvBody = (TextView) convertView.findViewById(R.id.tvBody);
+        TextView tvDate = (TextView) convertView.findViewById(R.id.tvDate);
+        ImageView ivProfileImage = (ImageView) convertView.findViewById(R.id.ivProfileImage);
 
         tvUserName.setText(user.getScreenName());
         tvBody.setText(tweet.getBody());
+        tvDate.setText(ParseRelativeDate.getRelativeTimeAgo(tweet.getCreatedAt()));
         ivProfileImage.setImageResource(android.R.color.transparent);
         Picasso.with(getContext()).load(user.getProfileImageUrl()).into(ivProfileImage);
         return convertView;
