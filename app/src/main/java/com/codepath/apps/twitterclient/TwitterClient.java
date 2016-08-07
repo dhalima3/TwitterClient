@@ -28,6 +28,7 @@ public class TwitterClient extends OAuthBaseClient {
     // TODO MOVE THE API KEYS TO A SECRET.XML
 	public static final String REST_CONSUMER_SECRET = "AWj5qTXaWuagefc9oZUBWoNdxW53khogdrBFHeY4xOf90TmtAr"; // Change this
 	public static final String REST_CALLBACK_URL = "oauth://cptwitter"; // Change this (here and in manifest)
+	public static final String LOGGED_IN_USER = "dhammer67";
 
 	public TwitterClient(Context context) {
 		super(context, REST_API_CLASS, REST_URL, REST_CONSUMER_KEY, REST_CONSUMER_SECRET, REST_CALLBACK_URL);
@@ -49,6 +50,13 @@ public class TwitterClient extends OAuthBaseClient {
 		params.put("count", 25);
 		params.put("since_id", 1);
 		getClient().get(apiUrl, params, handler);
+	}
+
+	public void getLoggedInUser(AsyncHttpResponseHandler handler) {
+		String apiUrl = getApiUrl("users/show.json");
+		RequestParams params = new RequestParams();
+		params.put("screen_name", LOGGED_IN_USER);
+		client.get(apiUrl, params, handler);
 	}
 
 	/* 1. Define the endpoint URL with getApiUrl and pass a relative path to the endpoint

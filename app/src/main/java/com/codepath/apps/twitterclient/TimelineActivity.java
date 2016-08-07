@@ -1,18 +1,23 @@
 package com.codepath.apps.twitterclient;
 
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ListView;
 
 import com.codepath.apps.twitterclient.adapters.TweetsArrayAdapter;
+import com.codepath.apps.twitterclient.fragments.CreateTweetFragment;
 import com.codepath.apps.twitterclient.models.Tweet;
+import com.codepath.apps.twitterclient.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -24,6 +29,7 @@ public class TimelineActivity extends AppCompatActivity {
     private ArrayList<Tweet> tweets;
     private TweetsArrayAdapter tweetsArrayAdapter;
     private ListView lvTweets;
+    private User loggedInUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +44,7 @@ public class TimelineActivity extends AppCompatActivity {
         lvTweets.setAdapter(tweetsArrayAdapter);
         client = TwitterApplication.getRestClient();
         populateTimeline();
+        getLoggedInUser();
     }
 
     @Override
@@ -47,7 +54,9 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     public void onComposeAction(MenuItem item) {
-
+        FragmentManager fm = getSupportFragmentManager();
+        CreateTweetFragment createTweetFragment = CreateTweetFragment.newInstance(loggedInUser);
+        createTweetFragment.show(fm, "fragment_compose_tweet");
     }
 
     private void populateTimeline() {
@@ -68,5 +77,23 @@ public class TimelineActivity extends AppCompatActivity {
                 Log.d("DEBUG", errorResponse.toString());
             }
         });
+    }
+
+    private void getLoggedInUser() {
+        client.getLoggedInUser(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                loggedInUser = User.fromJson(response);
+            }
+
+            @Override
+            public void onFailure(int statusCode, Header[] headers, Throwable throwable,
+                                  JSONObject errorResponse) {
+                Log.d("DEBUG", errorResponse.toString());
+            }
+        });
+    }
+
+    public void onClose(View view) {
     }
 }
