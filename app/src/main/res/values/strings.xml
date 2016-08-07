@@ -4,5 +4,7 @@
     <string name="app_name">Twitter Client</string>
     <string name="login_label">Connect to Twitter</string>
     <string name="compose">Compose</string>
+    <string name="closeButton">Close Button</string>
+    <string name="profilePicture">Profile Picture</string>
 
 </resources>
