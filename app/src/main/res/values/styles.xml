@@ -24,4 +24,9 @@
         <item name="android:textSize">12sp</item>
     </style>
 
+    <style name="TweetButton" parent="Theme.AppCompat.Light">
+        <item name="android:background">#57ADEE</item>
+        <item name="android:textColor">#284F6D</item>
+    </style>
+
 </resources>
