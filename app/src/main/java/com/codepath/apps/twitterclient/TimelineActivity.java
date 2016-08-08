@@ -12,6 +12,7 @@ import android.widget.ListView;
 
 import com.codepath.apps.twitterclient.adapters.TweetsArrayAdapter;
 import com.codepath.apps.twitterclient.fragments.CreateTweetFragment;
+import com.codepath.apps.twitterclient.fragments.CreateTweetFragment.CreateTweetFragmentListener;
 import com.codepath.apps.twitterclient.models.Tweet;
 import com.codepath.apps.twitterclient.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -23,7 +24,7 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
-public class TimelineActivity extends AppCompatActivity {
+public class TimelineActivity extends AppCompatActivity implements CreateTweetFragmentListener {
 
     private TwitterClient client;
     private ArrayList<Tweet> tweets;
@@ -51,6 +52,11 @@ public class TimelineActivity extends AppCompatActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_timeline, menu);
         return true;
+    }
+
+    @Override
+    public void onFinishCreateTweetFragment(Tweet tweet) {
+        tweetsArrayAdapter.insert(tweet, 0);
     }
 
     public void onComposeAction(MenuItem item) {
