@@ -23,6 +23,7 @@ import com.loopj.android.http.JsonHttpResponseHandler;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -50,7 +51,7 @@ public class CreateTweetFragment extends DialogFragment {
     public static CreateTweetFragment newInstance(User user) {
         CreateTweetFragment fragment = new CreateTweetFragment();
         Bundle args = new Bundle();
-        args.putSerializable("user", user);
+        args.putParcelable("user", Parcels.wrap(user));
         fragment.setArguments(args);
         return fragment;
     }
@@ -66,7 +67,7 @@ public class CreateTweetFragment extends DialogFragment {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        User user = (User) getArguments().getSerializable("user");
+        User user = (User) Parcels.unwrap(getArguments().getParcelable("user"));
         ivProfilePicture = (ImageView) view.findViewById(R.id.ivProfilePicture);
         tvName = (TextView) view.findViewById(R.id.tvName);
         tvUserName = (TextView) view.findViewById(R.id.tvUserName);

@@ -39,6 +39,9 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         Tweet tweet = tweets.get(position);
         User user = tweet.getUser();
 
+        TextView tvName = holder.tvName;
+        tvName.setText(user.getName());
+
         TextView tvUserName = holder.tvUserName;
         tvUserName.setText("@" + user.getScreenName());
 
@@ -73,6 +76,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
+        public TextView tvName;
         public TextView tvUserName;
         public TextView tvBody;
         public TextView tvDate;
@@ -81,6 +85,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         public ViewHolder(View itemView) {
             super(itemView);
 
+            tvName = (TextView) itemView.findViewById(R.id.tvName);
             tvUserName = (TextView) itemView.findViewById(R.id.tvUserName);
             tvBody = (TextView) itemView.findViewById(R.id.tvBody);
             tvDate = (TextView) itemView.findViewById(R.id.tvDate);
