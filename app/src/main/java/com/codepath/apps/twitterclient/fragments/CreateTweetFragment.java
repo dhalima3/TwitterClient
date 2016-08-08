@@ -77,7 +77,7 @@ public class CreateTweetFragment extends DialogFragment {
             Picasso.with(getContext()).load(user.getProfileImageUrl()).into(ivProfilePicture);
         }
         tvName.setText(user.getName());
-        tvUserName.setText(user.getScreenName());
+        tvUserName.setText("@" + user.getScreenName());
         
         etTweetCharacterCount.setText(Integer.toString(TWITTER_CHARACTER_LIMIT));
         addTextChangedListenerToTweetCharacterCountEditText();

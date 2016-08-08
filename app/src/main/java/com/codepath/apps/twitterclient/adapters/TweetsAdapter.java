@@ -40,7 +40,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
         User user = tweet.getUser();
 
         TextView tvUserName = holder.tvUserName;
-        tvUserName.setText(user.getScreenName());
+        tvUserName.setText("@" + user.getScreenName());
 
         TextView tvBody = holder.tvBody;
         tvBody.setText(tweet.getBody());
