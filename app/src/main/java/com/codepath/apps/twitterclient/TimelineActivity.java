@@ -16,6 +16,7 @@ import com.codepath.apps.twitterclient.fragments.CreateTweetFragment;
 import com.codepath.apps.twitterclient.fragments.CreateTweetFragment.CreateTweetFragmentListener;
 import com.codepath.apps.twitterclient.models.Tweet;
 import com.codepath.apps.twitterclient.models.User;
+import com.codepath.apps.twitterclient.utils.EndlessRecyclerViewScrollListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -31,6 +32,7 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
     private ArrayList<Tweet> tweets;
     private User loggedInUser;
     private TweetsAdapter tweetsArrayAdapter;
+    private long maxId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,10 +45,17 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
         tweets = new ArrayList<>();
         tweetsArrayAdapter = new TweetsAdapter(this, tweets);
         rvTweets.setAdapter(tweetsArrayAdapter);
-        rvTweets.setLayoutManager(new LinearLayoutManager(this));
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        rvTweets.setLayoutManager(linearLayoutManager);
+        rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                populateTimeline(maxId);
+            }
+        });
 
         client = TwitterApplication.getRestClient();
-        populateTimeline();
+        populateTimeline(-1);
         getLoggedInUser();
     }
 
@@ -68,7 +77,7 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
         createTweetFragment.show(fm, "fragment_compose_tweet");
     }
 
-    private void populateTimeline() {
+    private void populateTimeline(long sinceId) {
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
@@ -79,6 +88,7 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
                 int previousSize = tweets.size();
                 tweets.addAll(Tweet.fromJsonArray(json));
                 tweetsArrayAdapter.notifyItemRangeInserted(previousSize, tweets.size());
+                maxId = tweets.get(tweets.size()-1).getTweetId();
                 Log.d("DEBUG", tweetsArrayAdapter.toString());
             }
 
@@ -87,7 +97,7 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
                                   JSONArray errorResponse) {
                 Log.d("DEBUG", errorResponse.toString());
             }
-        });
+        }, maxId);
     }
 
     private void getLoggedInUser() {
