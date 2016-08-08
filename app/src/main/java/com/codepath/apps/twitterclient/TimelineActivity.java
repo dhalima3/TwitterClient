@@ -2,6 +2,7 @@ package com.codepath.apps.twitterclient;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -33,12 +34,16 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
     private User loggedInUser;
     private TweetsAdapter tweetsArrayAdapter;
     private long maxId;
+    private SwipeRefreshLayout swipeTimelineContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
         RecyclerView rvTweets = (RecyclerView) findViewById(R.id.rvTweets);
+
+        configureSwipeTimelineContainer();
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarTimeline);
         setSupportActionBar(toolbar);
 
@@ -77,7 +82,7 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
         createTweetFragment.show(fm, "fragment_compose_tweet");
     }
 
-    private void populateTimeline(long sinceId) {
+    private void populateTimeline(long maxId) {
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
@@ -88,7 +93,7 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
                 int previousSize = tweets.size();
                 tweets.addAll(Tweet.fromJsonArray(json));
                 tweetsArrayAdapter.notifyItemRangeInserted(previousSize, tweets.size());
-                maxId = tweets.get(tweets.size()-1).getTweetId();
+                TimelineActivity.this.maxId = tweets.get(tweets.size()-1).getTweetId();
                 Log.d("DEBUG", tweetsArrayAdapter.toString());
             }
 
@@ -97,7 +102,7 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
                                   JSONArray errorResponse) {
                 Log.d("DEBUG", errorResponse.toString());
             }
-        }, maxId);
+        }, this.maxId);
     }
 
     private void getLoggedInUser() {
@@ -116,5 +121,34 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
     }
 
     public void onClose(View view) {
+    }
+
+    private void configureSwipeTimelineContainer() {
+        swipeTimelineContainer = (SwipeRefreshLayout) findViewById(R.id.swipeTimelineContainer);
+        swipeTimelineContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                fetchTimelineAsync(-1);
+            }
+        });
+        swipeTimelineContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+    }
+
+    private void fetchTimelineAsync(int maxId) {
+        client.getHomeTimeline(new JsonHttpResponseHandler() {
+            @Override
+            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
+                tweetsArrayAdapter.clear();
+                tweetsArrayAdapter.addAll(Tweet.fromJsonArray(response));
+                swipeTimelineContainer.setRefreshing(false);
+            }
+
+            public void onFailure(Throwable e) {
+                Log.d("DEBUG", "Fetch timeline error: " + e.toString());
+            }
+        }, maxId);
     }
 }
