@@ -46,7 +46,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="What's happening?"
+        android:hint="What's happening?"
         android:id="@+id/etTweetBody"
         android:layout_below="@+id/btnClose"
         android:layout_alignParentLeft="true"
