@@ -14,20 +14,23 @@
         tools:src="@drawable/ic_launcher"/>
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
         android:id="@+id/ivProfilePicture"
         android:contentDescription="@string/profilePicture"
         android:layout_alignTop="@+id/btnClose"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        tools:src="@drawable/ic_launcher"/>
+        tools:src="@drawable/ic_launcher"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="10dp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="username"
+        style="@style/TextLabel"
         android:id="@+id/tvName"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/ivProfilePicture"
@@ -38,6 +41,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="\@handle"
+        style="@style/TextLabel"
         android:id="@+id/tvUserName"
         android:layout_below="@+id/tvName"
         android:layout_toLeftOf="@+id/ivProfilePicture"
@@ -48,7 +52,7 @@
         android:layout_height="wrap_content"
         android:hint="What's happening?"
         android:id="@+id/etTweetBody"
-        android:layout_below="@+id/btnClose"
+        android:layout_below="@+id/ivProfilePicture"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentRight="true"
@@ -61,7 +65,10 @@
         android:id="@+id/btnCreateTweet"
         android:layout_alignParentBottom="true"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true" />
+        android:layout_alignParentEnd="true"
+        android:layout_marginBottom="25dp"
+        android:layout_marginRight="25dp"
+        android:layout_marginLeft="10dp" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -70,6 +77,7 @@
         android:background="@android:color/transparent"
         android:focusable="false"
         android:id="@+id/etTweetCharacterCount"
+        style="@style/TextLabel"
         android:layout_alignBaseline="@+id/btnCreateTweet"
         android:layout_alignParentBottom="true"
         android:layout_toLeftOf="@+id/btnCreateTweet"
