@@ -92,7 +92,7 @@ public class CreateTweetFragment extends DialogFragment {
         });
     }
 
-    public void sendTweet() {
+    private void sendTweet() {
         String statusUpdate = etTweetBody.getText().toString();
         client.postStatusUpdate(new JsonHttpResponseHandler() {
             @Override
