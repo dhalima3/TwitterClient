@@ -3,14 +3,15 @@ package com.codepath.apps.twitterclient;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ListView;
 
-import com.codepath.apps.twitterclient.adapters.TweetsArrayAdapter;
+import com.codepath.apps.twitterclient.adapters.TweetsAdapter;
 import com.codepath.apps.twitterclient.fragments.CreateTweetFragment;
 import com.codepath.apps.twitterclient.fragments.CreateTweetFragment.CreateTweetFragmentListener;
 import com.codepath.apps.twitterclient.models.Tweet;
@@ -28,21 +29,22 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
 
     private TwitterClient client;
     private ArrayList<Tweet> tweets;
-    private TweetsArrayAdapter tweetsArrayAdapter;
-    private ListView lvTweets;
     private User loggedInUser;
+    private TweetsAdapter tweetsArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
-        lvTweets = (ListView) findViewById(R.id.lvTweets);
+        RecyclerView rvTweets = (RecyclerView) findViewById(R.id.rvTweets);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarTimeline);
         setSupportActionBar(toolbar);
 
         tweets = new ArrayList<>();
-        tweetsArrayAdapter = new TweetsArrayAdapter(this, tweets);
-        lvTweets.setAdapter(tweetsArrayAdapter);
+        tweetsArrayAdapter = new TweetsAdapter(this, tweets);
+        rvTweets.setAdapter(tweetsArrayAdapter);
+        rvTweets.setLayoutManager(new LinearLayoutManager(this));
+
         client = TwitterApplication.getRestClient();
         populateTimeline();
         getLoggedInUser();
@@ -56,7 +58,8 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
 
     @Override
     public void onFinishCreateTweetFragment(Tweet tweet) {
-        tweetsArrayAdapter.insert(tweet, 0);
+        tweets.add(0, tweet);
+        tweetsArrayAdapter.notifyItemChanged(0);
     }
 
     public void onComposeAction(MenuItem item) {
@@ -73,7 +76,9 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
                 //Deserialize Json
                 //Create models and add them to adapter
                 //load the model data into listview
-                tweetsArrayAdapter.addAll(Tweet.fromJsonArray(json));
+                int previousSize = tweets.size();
+                tweets.addAll(Tweet.fromJsonArray(json));
+                tweetsArrayAdapter.notifyItemRangeInserted(previousSize, tweets.size());
                 Log.d("DEBUG", tweetsArrayAdapter.toString());
             }
 
