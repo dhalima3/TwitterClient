@@ -3,6 +3,8 @@ package com.codepath.apps.twitterclient.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +28,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class CreateTweetFragment extends DialogFragment {
 
+    public static final int TWITTER_CHARACTER_LIMIT = 140;
     User currentUser;
     private ImageButton btnClose;
     private ImageView ivProfilePicture;
@@ -33,7 +36,7 @@ public class CreateTweetFragment extends DialogFragment {
     private TextView tvUserName;
     private EditText etTweetBody;
     private Button btnCreateTweet;
-    private TextView tvTweetCharacterCount;
+    private TextView etTweetCharacterCount;
     private TwitterClient client;
 
     public CreateTweetFragment() {
@@ -68,12 +71,16 @@ public class CreateTweetFragment extends DialogFragment {
         tvName = (TextView) view.findViewById(R.id.tvName);
         tvUserName = (TextView) view.findViewById(R.id.tvUserName);
         etTweetBody = (EditText) view.findViewById(R.id.etTweetBody);
+        etTweetCharacterCount = (EditText) view.findViewById(R.id.etTweetCharacterCount);
 
         if (user.getProfileImageUrl() != null) {
             Picasso.with(getContext()).load(user.getProfileImageUrl()).into(ivProfilePicture);
         }
         tvName.setText(user.getName());
         tvUserName.setText(user.getScreenName());
+        
+        etTweetCharacterCount.setText(Integer.toString(TWITTER_CHARACTER_LIMIT));
+        addTextChangedListenerToTweetCharacterCountEditText();
 
         btnClose = (ImageButton) view.findViewById(R.id.btnClose);
         btnCreateTweet = (Button) view.findViewById(R.id.btnCreateTweet);
@@ -102,4 +109,24 @@ public class CreateTweetFragment extends DialogFragment {
         }, statusUpdate);
     }
 
+    private void addTextChangedListenerToTweetCharacterCountEditText() {
+        etTweetBody.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+                int currentCharCount = etTweetBody.getText().toString().length();
+                etTweetCharacterCount.setText(Integer.toString(TWITTER_CHARACTER_LIMIT -
+                        currentCharCount));
+            }
+        });
+    }
 }
