@@ -11,6 +11,7 @@
         android:contentDescription="@string/closeButton"
         android:id="@+id/btnClose"
         android:onClick="onClose"
+        android:visibility="gone"
         tools:src="@drawable/ic_launcher"/>
 
     <ImageView
