@@ -2,14 +2,18 @@ package com.codepath.apps.twitterclient.models;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcel;
 
-import java.io.Serializable;
+@Parcel
+public class User {
+    String name;
+    long userId;
+    String screenName;
+    String profileImageUrl;
 
-public class User implements Serializable {
-    private String name;
-    private long userId;
-    private String screenName;
-    private String profileImageUrl;
+    public User() {
+
+    }
 
     public static User fromJson(JSONObject json) {
         User user = new User();
