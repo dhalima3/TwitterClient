@@ -3,7 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/white">
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -24,7 +25,8 @@
         android:layout_alignParentEnd="true"
         tools:src="@drawable/ic_launcher"
         android:layout_marginRight="20dp"
-        android:layout_marginLeft="10dp" />
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -35,7 +37,8 @@
         android:id="@+id/tvName"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/ivProfilePicture"
-        android:layout_toStartOf="@+id/ivProfilePicture" />
+        android:layout_toStartOf="@+id/ivProfilePicture"
+        android:layout_marginTop="20dp" />
 
     <TextView
         android:layout_width="wrap_content"
