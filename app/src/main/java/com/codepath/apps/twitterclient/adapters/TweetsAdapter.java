@@ -1,6 +1,7 @@
 package com.codepath.apps.twitterclient.adapters;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codepath.apps.twitterclient.ProfileActivity;
 import com.codepath.apps.twitterclient.R;
 import com.codepath.apps.twitterclient.models.Tweet;
 import com.codepath.apps.twitterclient.models.User;
@@ -37,7 +39,7 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Tweet tweet = tweets.get(position);
-        User user = tweet.getUser();
+        final User user = tweet.getUser();
 
         TextView tvName = holder.tvName;
         tvName.setText(user.getName());
@@ -53,6 +55,15 @@ public class TweetsAdapter extends RecyclerView.Adapter<TweetsAdapter.ViewHolder
 
         ImageView ivProfileImage = holder.ivProfileImage;
         ivProfileImage.setImageResource(android.R.color.transparent);
+        ivProfileImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), ProfileActivity.class);
+                intent.putExtra("user_id", user.getUserId());
+                intent.putExtra("screen_name", user.getScreenName());
+                view.getContext().startActivity(intent);
+            }
+        });
         Picasso.with(getContext()).load(user.getProfileImageUrl()).into(ivProfileImage);
     }
 

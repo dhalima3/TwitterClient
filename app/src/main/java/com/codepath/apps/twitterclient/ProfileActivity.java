@@ -25,6 +25,8 @@ public class ProfileActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_profile);
 
+        long userId = getIntent().getLongExtra("user_id", 0);
+        String screenName = getIntent().getStringExtra("screen_name");
         client = TwitterApplication.getRestClient();
         client.getUserInfo(new JsonHttpResponseHandler() {
             @Override
@@ -33,10 +35,8 @@ public class ProfileActivity extends AppCompatActivity {
                 getSupportActionBar().setTitle("@" + user.getScreenName());
                 populateProfileHeader(user);
             }
-        });
+        }, userId, screenName);
 
-
-        String screenName = getIntent().getStringExtra("screen_name");
         if (savedInstanceState == null) {
             // Create the user timeline fragment
             UserTimelineFragment fragmentUserTimeline = UserTimelineFragment.newInstance(screenName);
