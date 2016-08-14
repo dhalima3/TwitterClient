@@ -1,67 +1,48 @@
 package com.codepath.apps.twitterclient;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.codepath.apps.twitterclient.adapters.TweetsAdapter;
+import com.astuetz.PagerSlidingTabStrip;
 import com.codepath.apps.twitterclient.fragments.CreateTweetFragment;
-import com.codepath.apps.twitterclient.fragments.CreateTweetFragment.CreateTweetFragmentListener;
-import com.codepath.apps.twitterclient.models.Tweet;
+import com.codepath.apps.twitterclient.fragments.HomeTimelineFragment;
+import com.codepath.apps.twitterclient.fragments.MentionsTimelineFragment;
 import com.codepath.apps.twitterclient.models.User;
-import com.codepath.apps.twitterclient.utils.EndlessRecyclerViewScrollListener;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
-import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
-public class TimelineActivity extends AppCompatActivity implements CreateTweetFragmentListener {
+public class TimelineActivity extends AppCompatActivity {
 
     private TwitterClient client;
-    private ArrayList<Tweet> tweets;
     private User loggedInUser;
-    private TweetsAdapter tweetsArrayAdapter;
-    private long maxId;
-    private SwipeRefreshLayout swipeTimelineContainer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_timeline);
-        RecyclerView rvTweets = (RecyclerView) findViewById(R.id.rvTweets);
 
-        configureSwipeTimelineContainer();
+        client = TwitterApplication.getRestClient();
+        getLoggedInUser();
+
+        ViewPager viewPager = (ViewPager) findViewById(R.id.viewpager);
+        viewPager.setAdapter(new TweetsPagerAdapter(getSupportFragmentManager()));
+        PagerSlidingTabStrip tabStrip = (PagerSlidingTabStrip) findViewById(R.id.tabs);
+        tabStrip.setViewPager(viewPager);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarTimeline);
         setSupportActionBar(toolbar);
-
-        tweets = new ArrayList<>();
-        tweetsArrayAdapter = new TweetsAdapter(this, tweets);
-        rvTweets.setAdapter(tweetsArrayAdapter);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        rvTweets.setLayoutManager(linearLayoutManager);
-        rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                populateTimeline(maxId);
-            }
-        });
-
-        client = TwitterApplication.getRestClient();
-        populateTimeline(-1);
-        getLoggedInUser();
     }
 
     @Override
@@ -70,41 +51,10 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
         return true;
     }
 
-    @Override
-    public void onFinishCreateTweetFragment(Tweet tweet) {
-        tweets.add(0, tweet);
-        tweetsArrayAdapter.notifyItemChanged(0);
+    public void onClose(View view) {
     }
 
-    public void onComposeAction(MenuItem item) {
-        FragmentManager fm = getSupportFragmentManager();
-        CreateTweetFragment createTweetFragment = CreateTweetFragment.newInstance(loggedInUser);
-        createTweetFragment.show(fm, "fragment_compose_tweet");
-    }
-
-    private void populateTimeline(long maxId) {
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
-                Log.d("DEBUG", json.toString());
-                //Deserialize Json
-                //Create models and add them to adapter
-                //load the model data into listview
-                int previousSize = tweets.size();
-                tweets.addAll(Tweet.fromJsonArray(json));
-                tweetsArrayAdapter.notifyItemRangeInserted(previousSize, tweets.size());
-                TimelineActivity.this.maxId = tweets.get(tweets.size()-1).getTweetId();
-                Log.d("DEBUG", tweetsArrayAdapter.toString());
-            }
-
-            @Override
-            public void onFailure(int statusCode, Header[] headers, Throwable throwable,
-                                  JSONArray errorResponse) {
-                Log.d("DEBUG", errorResponse.toString());
-            }
-        }, this.maxId);
-    }
-
+    //TODO move into fragment
     private void getLoggedInUser() {
         client.getLoggedInUser(new JsonHttpResponseHandler() {
             @Override
@@ -120,35 +70,41 @@ public class TimelineActivity extends AppCompatActivity implements CreateTweetFr
         });
     }
 
-    public void onClose(View view) {
+    public void onComposeAction(MenuItem item) {
+        FragmentManager fm = getSupportFragmentManager();
+        CreateTweetFragment createTweetFragment = CreateTweetFragment.newInstance(loggedInUser);
+        createTweetFragment.show(fm, "fragment_compose_tweet");
     }
 
-    private void configureSwipeTimelineContainer() {
-        swipeTimelineContainer = (SwipeRefreshLayout) findViewById(R.id.swipeTimelineContainer);
-        swipeTimelineContainer.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                fetchTimelineAsync(-1);
-            }
-        });
-        swipeTimelineContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
-                android.R.color.holo_green_light,
-                android.R.color.holo_orange_light,
-                android.R.color.holo_red_light);
-    }
+    //return the order of the fragments in the view pager
+    public class TweetsPagerAdapter extends FragmentPagerAdapter {
+        private String tabTitles[] = {"Home", "Mentions"};
 
-    private void fetchTimelineAsync(int maxId) {
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
-            @Override
-            public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
-                tweetsArrayAdapter.clear();
-                tweetsArrayAdapter.addAll(Tweet.fromJsonArray(response));
-                swipeTimelineContainer.setRefreshing(false);
-            }
+        // Adapter gets the manager insert or remove fragment from activity
+        public TweetsPagerAdapter(FragmentManager fm) {
+            super(fm);
+        }
 
-            public void onFailure(Throwable e) {
-                Log.d("DEBUG", "Fetch timeline error: " + e.toString());
+        // The order and creation of fragments within the pager
+        @Override
+        public Fragment getItem(int position) {
+            if (position == 0) {
+                return new HomeTimelineFragment();
+            } else if (position == 1) {
+                return new MentionsTimelineFragment();
+            } else {
+                return null;
             }
-        }, maxId);
+        }
+
+        @Override
+        public CharSequence getPageTitle(int position) {
+            return tabTitles[position];
+        }
+
+        @Override
+        public int getCount() {
+            return tabTitles.length;
+        }
     }
 }
