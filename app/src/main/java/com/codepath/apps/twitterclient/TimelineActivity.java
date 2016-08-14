@@ -1,5 +1,6 @@
 package com.codepath.apps.twitterclient;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -74,6 +75,11 @@ public class TimelineActivity extends AppCompatActivity {
         FragmentManager fm = getSupportFragmentManager();
         CreateTweetFragment createTweetFragment = CreateTweetFragment.newInstance(loggedInUser);
         createTweetFragment.show(fm, "fragment_compose_tweet");
+    }
+
+    public void onProfileView(MenuItem item) {
+        Intent intent = new Intent(this, ProfileActivity.class);
+        startActivity(intent);
     }
 
     //return the order of the fragments in the view pager

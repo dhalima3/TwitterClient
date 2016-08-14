@@ -69,7 +69,7 @@ public class CreateTweetFragment extends DialogFragment {
 
         User user = (User) Parcels.unwrap(getArguments().getParcelable("user"));
         ivProfilePicture = (ImageView) view.findViewById(R.id.ivProfilePicture);
-        tvName = (TextView) view.findViewById(R.id.tvName);
+        tvName = (TextView) view.findViewById(R.id.tvFullName);
         tvUserName = (TextView) view.findViewById(R.id.tvUserName);
         etTweetBody = (EditText) view.findViewById(R.id.etTweetBody);
         etTweetCharacterCount = (EditText) view.findViewById(R.id.etTweetCharacterCount);
