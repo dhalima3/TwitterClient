@@ -98,7 +98,8 @@ public class CreateTweetFragment extends DialogFragment {
         client.postStatusUpdate(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                CreateTweetFragmentListener listener = (CreateTweetFragmentListener) getActivity();
+                CreateTweetFragmentListener listener = (CreateTweetFragmentListener) getActivity().
+                        getSupportFragmentManager().getFragments().get(0);
                 listener.onFinishCreateTweetFragment(Tweet.fromJson(response));
                 dismiss();
             }

@@ -19,7 +19,9 @@ import com.codepath.apps.twitterclient.utils.EndlessRecyclerViewScrollListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class TweetsListFragment extends Fragment {
+import static com.codepath.apps.twitterclient.fragments.CreateTweetFragment.*;
+
+public abstract class TweetsListFragment extends Fragment implements CreateTweetFragmentListener {
 
     protected ArrayList<Tweet> tweets;
     protected TweetsAdapter tweetsArrayAdapter;
@@ -79,5 +81,11 @@ public abstract class TweetsListFragment extends Fragment {
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
+    }
+
+    @Override
+    public void onFinishCreateTweetFragment(Tweet tweet) {
+        tweets.add(0, tweet);
+        tweetsArrayAdapter.notifyItemChanged(0);
     }
 }

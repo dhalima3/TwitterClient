@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.codepath.apps.twitterclient.TwitterApplication;
 import com.codepath.apps.twitterclient.TwitterClient;
-import com.codepath.apps.twitterclient.fragments.CreateTweetFragment.CreateTweetFragmentListener;
 import com.codepath.apps.twitterclient.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
@@ -13,7 +12,7 @@ import org.json.JSONArray;
 
 import cz.msebera.android.httpclient.Header;
 
-public class HomeTimelineFragment extends TweetsListFragment implements CreateTweetFragmentListener {
+public class HomeTimelineFragment extends TweetsListFragment {
 
     private TwitterClient client;
     private long maxId;
@@ -44,11 +43,5 @@ public class HomeTimelineFragment extends TweetsListFragment implements CreateTw
                 Log.d("DEBUG", errorResponse.toString());
             }
         }, this.maxId);
-    }
-
-    @Override
-    public void onFinishCreateTweetFragment(Tweet tweet) {
-        tweets.add(0, tweet);
-        tweetsArrayAdapter.notifyItemChanged(0);
     }
 }
