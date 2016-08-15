@@ -1,8 +1,11 @@
 package com.codepath.apps.twitterclient.models;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.parceler.Parcel;
+
+import java.util.ArrayList;
 
 @Parcel
 public class User {
@@ -33,6 +36,23 @@ public class User {
         }
 
         return user;
+    }
+
+    public static ArrayList<User> fromJsonArray(JSONArray jsonArray) {
+        ArrayList<User> users = new ArrayList<>();
+        for (int i = 0; i < jsonArray.length(); i++) {
+            try {
+                JSONObject userJson = jsonArray.getJSONObject(i);
+                User user = User.fromJson(userJson);
+                if (user != null) {
+                    users.add(user);
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+                continue;
+            }
+        }
+        return users;
     }
 
     public String getProfileImageUrl() {

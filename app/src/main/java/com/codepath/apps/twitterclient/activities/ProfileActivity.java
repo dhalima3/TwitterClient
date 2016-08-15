@@ -1,9 +1,11 @@
 package com.codepath.apps.twitterclient.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -53,7 +55,7 @@ public class ProfileActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
     }
 
-    private void populateProfileHeader(User user) {
+    private void populateProfileHeader(final User user) {
         TextView tvName = (TextView) findViewById(R.id.tvFullName);
         TextView tvTagline = (TextView) findViewById(R.id.tvTagline);
         TextView tvFollowers = (TextView) findViewById(R.id.tvFollowers);
@@ -62,8 +64,28 @@ public class ProfileActivity extends AppCompatActivity {
 
         tvName.setText(user.getName());
         tvTagline.setText(user.getTagline());
+
         tvFollowers.setText(user.getFollowersCount() + " Followers");
-        tvFollowing.setText(user.getFriendsCount() + " Following");
+        tvFollowers.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), FollowersActivity.class);
+                intent.putExtra("screen_name", user.getScreenName());
+                intent.putExtra("type", "users");
+                startActivity(intent);
+            }
+        });
+
+        tvFollowing.setText(user.getFriendsCount() + " Followings");
+        tvFollowing.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), FollowersActivity.class);
+                intent.putExtra("screen_name", user.getScreenName());
+                intent.putExtra("type", "followings");
+                startActivity(intent);
+            }
+        });
         Picasso.with(this).load(user.getProfileImageUrl()).into(ivProfileImage);
     }
 }
