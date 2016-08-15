@@ -1,13 +1,16 @@
 package com.codepath.apps.twitterclient.fragments;
 
 import android.os.Bundle;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.LinearLayoutManager;
 import android.util.Log;
 
+import com.codepath.apps.twitterclient.R;
 import com.codepath.apps.twitterclient.app.TwitterApplication;
-import com.codepath.apps.twitterclient.network.TwitterClient;
 import com.codepath.apps.twitterclient.models.Tweet;
 import com.codepath.apps.twitterclient.models.User;
+import com.codepath.apps.twitterclient.network.TwitterClient;
+import com.codepath.apps.twitterclient.utils.InternetCheckUtil;
 import com.loopj.android.http.JsonHttpResponseHandler;
 
 import org.json.JSONArray;
@@ -29,6 +32,11 @@ public class MentionsTimelineFragment extends TweetsListFragment {
     }
 
     protected void populateTimeline(long maxId) {
+        if (!InternetCheckUtil.isOnline()) {
+            Snackbar.make(rvTweets, R.string.internet_unavailable_message,
+                    Snackbar.LENGTH_LONG).show();
+            return;
+        }
         client.getMentionsTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {

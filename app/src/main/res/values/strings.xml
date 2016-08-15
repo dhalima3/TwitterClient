@@ -6,5 +6,6 @@
     <string name="compose">Compose</string>
     <string name="closeButton">Close Button</string>
     <string name="profilePicture">Profile Picture</string>
+    <string name="internet_unavailable_message">Internet unavailable</string>
 
 </resources>

@@ -30,6 +30,7 @@ dependencies {
         transitive = true
     }
     compile 'com.android.support:appcompat-v7:24.0.0'
+    compile 'com.android.support:design:24.0.0'
     // Picasso for remote image loading
     compile 'com.squareup.picasso:picasso:2.5.2'
     // Android Async Http for sending async network requests
