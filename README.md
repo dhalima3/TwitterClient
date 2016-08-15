@@ -22,7 +22,7 @@ The following **required** functionality is completed:
 The following **optional** features are implemented:
 
 * [X] User can view following / followers list through the profile
-* [ ] Implements robust error handling, [check if internet is available](http://guides.codepath.com/android/Sending-and-Managing-Network-Requests#checking-for-network-connectivity), handle error cases, network failures
+* [X] Implements robust error handling, [check if internet is available](http://guides.codepath.com/android/Sending-and-Managing-Network-Requests#checking-for-network-connectivity), handle error cases, network failures
 * [ ] When a network request is sent, user sees an [indeterminate progress indicator](http://guides.codepath.com/android/Handling-ProgressBars#progress-within-actionbar)
 * [ ] User can **"reply" to any tweet on their home timeline**
   * [ ] The user that wrote the original tweet is automatically "@" replied in compose
@@ -47,7 +47,11 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://i.imgur.com/link/to/your/gif/file.gif' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+<img src='http://imgur.com/5L2wEtu.gif' title='Week 4 Video Walkthrough' width='' alt='Video Walkthrough' />
+
+Week 3's user stories:
+
+<img src='http://imgur.com/IXsM2p9.gif' title='Week 3 Video Walkthrough' width='' alt='Video Walkthrough' />
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
@@ -93,7 +97,7 @@ The following **bonus** features are implemented:
 
 ## Notes
 
-Describe any challenges encountered while building the app.
+This week was a challenge for me because I was out of town for half the week, and it was tough to get time to work on this app.  I will continue to work on the optionals and try to finish as many as I can.
 
 ## Open-source libraries used
 
