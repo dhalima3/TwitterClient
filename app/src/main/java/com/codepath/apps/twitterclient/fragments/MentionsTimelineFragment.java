@@ -25,10 +25,10 @@ public class MentionsTimelineFragment extends TweetsListFragment {
 
         client = TwitterApplication.getRestClient();
         linearLayoutManager = new LinearLayoutManager(getActivity());
-        populateTimeline();
+        populateTimeline(-1);
     }
 
-    protected void populateTimeline() {
+    protected void populateTimeline(long maxId) {
         client.getMentionsTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
@@ -45,5 +45,6 @@ public class MentionsTimelineFragment extends TweetsListFragment {
                 Log.d("DEBUG", errorResponse.toString());
             }
         });
+        //TODO put maxId in call
     }
 }

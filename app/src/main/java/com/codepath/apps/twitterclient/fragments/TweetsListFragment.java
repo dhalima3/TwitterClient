@@ -29,7 +29,8 @@ public abstract class TweetsListFragment extends Fragment implements CreateTweet
     protected SwipeRefreshLayout swipeTimelineContainer;
     private LinearLayoutManager linearLayoutManager;
 
-    abstract protected void populateTimeline();
+    abstract protected void populateTimeline(long maxId);
+    static protected long maxId;
 
     //inflation logic
     @Override
@@ -43,7 +44,7 @@ public abstract class TweetsListFragment extends Fragment implements CreateTweet
         rvTweets.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
-                populateTimeline();
+                populateTimeline(maxId);
             }
         });
 
@@ -73,7 +74,7 @@ public abstract class TweetsListFragment extends Fragment implements CreateTweet
             @Override
             public void onRefresh() {
                 tweetsArrayAdapter.clear();
-                populateTimeline();
+                populateTimeline(-1);
                 swipeTimelineContainer.setRefreshing(false);
             }
         });

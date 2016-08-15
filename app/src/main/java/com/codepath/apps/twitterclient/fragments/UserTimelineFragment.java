@@ -25,7 +25,7 @@ public class UserTimelineFragment extends TweetsListFragment {
 
         client = TwitterApplication.getRestClient();
         linearLayoutManager = new LinearLayoutManager(getActivity());
-        populateTimeline();
+        populateTimeline(-1);
     }
 
     public static UserTimelineFragment newInstance(String screenName) {
@@ -36,13 +36,13 @@ public class UserTimelineFragment extends TweetsListFragment {
         return userFragment;
     }
 
-    protected void populateTimeline() {
+    protected void populateTimeline(long maxId) {
         String screenName = getArguments().getString("screen_name");
         client.getUserTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
                 Log.d("DEBUG", json.toString());
-                addAllAndReturnMaxId(Tweet.fromJsonArray(json));
+                TweetsListFragment.maxId = addAllAndReturnMaxId(Tweet.fromJsonArray(json));
                 //Deserialize Json
                 //Create models and add them to adapter
                 //load the model data into listview
@@ -53,6 +53,6 @@ public class UserTimelineFragment extends TweetsListFragment {
                                   JSONArray errorResponse) {
                 Log.d("DEBUG", errorResponse.toString());
             }
-        }, screenName);
+        }, screenName, maxId);
     }
 }

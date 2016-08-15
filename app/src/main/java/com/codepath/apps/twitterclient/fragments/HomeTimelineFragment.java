@@ -15,18 +15,16 @@ import cz.msebera.android.httpclient.Header;
 public class HomeTimelineFragment extends TweetsListFragment {
 
     private TwitterClient client;
-    private long maxId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         client = TwitterApplication.getRestClient();
-        populateTimeline();
-//        getLoggedInUser();
+        populateTimeline(-1);
     }
 
-    protected void populateTimeline() {
+    protected void populateTimeline(long maxId) {
         client.getHomeTimeline(new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray json) {
@@ -34,7 +32,7 @@ public class HomeTimelineFragment extends TweetsListFragment {
                 //Deserialize Json
                 //Create models and add them to adapter
                 //load the model data into listview
-                HomeTimelineFragment.this.maxId = addAllAndReturnMaxId(Tweet.fromJsonArray(json));
+                TweetsListFragment.maxId = addAllAndReturnMaxId(Tweet.fromJsonArray(json));
             }
 
             @Override
@@ -42,6 +40,6 @@ public class HomeTimelineFragment extends TweetsListFragment {
                                   JSONArray errorResponse) {
                 Log.d("DEBUG", errorResponse.toString());
             }
-        }, this.maxId);
+        }, maxId);
     }
 }
