@@ -3,8 +3,8 @@ package com.codepath.apps.twitterclient.fragments;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.codepath.apps.twitterclient.TwitterApplication;
-import com.codepath.apps.twitterclient.TwitterClient;
+import com.codepath.apps.twitterclient.app.TwitterApplication;
+import com.codepath.apps.twitterclient.network.TwitterClient;
 import com.codepath.apps.twitterclient.models.Tweet;
 import com.loopj.android.http.JsonHttpResponseHandler;
 

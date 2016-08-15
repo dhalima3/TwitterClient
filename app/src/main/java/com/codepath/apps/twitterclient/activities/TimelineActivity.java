@@ -1,4 +1,4 @@
-package com.codepath.apps.twitterclient;
+package com.codepath.apps.twitterclient.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,6 +14,9 @@ import android.view.MenuItem;
 import android.view.View;
 
 import com.astuetz.PagerSlidingTabStrip;
+import com.codepath.apps.twitterclient.R;
+import com.codepath.apps.twitterclient.app.TwitterApplication;
+import com.codepath.apps.twitterclient.network.TwitterClient;
 import com.codepath.apps.twitterclient.fragments.CreateTweetFragment;
 import com.codepath.apps.twitterclient.fragments.HomeTimelineFragment;
 import com.codepath.apps.twitterclient.fragments.MentionsTimelineFragment;

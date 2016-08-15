@@ -1,4 +1,4 @@
-package com.codepath.apps.twitterclient;
+package com.codepath.apps.twitterclient.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
@@ -7,6 +7,9 @@ import android.support.v7.widget.Toolbar;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.codepath.apps.twitterclient.R;
+import com.codepath.apps.twitterclient.app.TwitterApplication;
+import com.codepath.apps.twitterclient.network.TwitterClient;
 import com.codepath.apps.twitterclient.fragments.UserTimelineFragment;
 import com.codepath.apps.twitterclient.models.User;
 import com.loopj.android.http.JsonHttpResponseHandler;
