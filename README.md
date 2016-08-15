@@ -55,6 +55,10 @@ Week 3's user stories:
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
+## Notes
+
+This week was a challenge for me because I was out of town for half the week, and it was tough to get time to work on this app.  I will continue to work on the optionals and try to finish as many as I can.
+
 # Project 3 - *Twitter Client*
 
 ## User Stories
@@ -94,10 +98,6 @@ The following **bonus** features are implemented:
 * [ ] Replace all icon drawables and other static image assets with [vector drawables](http://guides.codepath.com/android/Drawables#vector-drawables) where appropriate.
 * [ ] Leverages the [data binding support module](http://guides.codepath.com/android/Applying-Data-Binding-for-Views) to bind data into layout templates.
 * [ ] Replace Picasso with [Glide](http://inthecheesefactory.com/blog/get-to-know-glide-recommended-by-google/en) for more efficient image rendering.
-
-## Notes
-
-This week was a challenge for me because I was out of town for half the week, and it was tough to get time to work on this app.  I will continue to work on the optionals and try to finish as many as I can.
 
 ## Open-source libraries used
 
